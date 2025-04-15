@@ -1,5 +1,5 @@
 import express from 'express';
-import jsonwebtoken from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import User from '../models/userModel.js';
 import dotenv from 'dotenv';
 
@@ -38,8 +38,9 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ error: 'Invalid password' });
         }
 
-        const jwt_secret = process.env.JWT_TOKEN;
-        const token = jsonwebtoken.sign({ userId: user._id, role: user.role }, jwt_secret, { expiresIn: '1h' });
+        // Generate token for authentication
+        const jwt_secret = process.env.JWT_SECRET;
+        const token = jwt.sign({ userId: user._id, role: user.role }, jwt_secret, { expiresIn: '1h' });
         res.status(200).json({ token });
 
     } catch (error) {
