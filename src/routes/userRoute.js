@@ -19,7 +19,7 @@ router.put('/profile', verifyToken, async (req, res) => {
             res.status(404).json({ message: 'User not found' });
         }
     } catch (error) {
-        res.status(500).json({ error: error.message, user: req.user });
+        res.status(500).json({ error: error.message });
     }
 });
 
@@ -33,8 +33,28 @@ router.get('/profile', verifyToken, async (req, res) => {
             res.status(404).json({ message: 'User not found' });
         }
     } catch (error) {
-        res.status(500).json({ error: error.message, user: req.user });
+        res.status(500).json({ error: error.message });
     }
 });
+
+// Change user password
+router.put('/profile/password', verifyToken, async (req, res) => {
+    const { currentPassword, newPassword } = req.body;
+
+    try {
+        const user = await User.findById(req.user.userId);
+        if (user && await user.comparePassword(currentPassword)) {
+            user.password = newPassword;
+            await user.save();
+            res.status(200).json({ message: 'Password changed successfully' });
+        } else {
+            res.status(401).json({ message: 'Invalid current password' });
+        }            
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Upload user profile picture
 
 export default router;
