@@ -5,6 +5,7 @@ import authRoute from './routes/authRoute.js';
 import bodyParser from 'body-parser';
 import userRoute from './routes/userRoute.js';
 import postRoute from './routes/postRoute.js';
+import commentRoute from './routes/commentRoute.js';
 
 
 const app = express();
@@ -22,7 +23,8 @@ app.use(bodyParser.json());
 app.use('/api/auth', authRoute);
 app.use('/api/users', userRoute);
 app.use('/api', postRoute);
+app.use('/api/posts', commentRoute)
 
 app.listen(port, () => {
-    console.log(`server is runing on port ${port}`)
+    console.log(`server is runing on port ${port}`);
 });
